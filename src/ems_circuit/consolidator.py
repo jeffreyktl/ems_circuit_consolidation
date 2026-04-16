@@ -32,8 +32,28 @@ def consolidate_evidence(evidence_rows: list[EvidenceRow], settings: dict) -> tu
         if len(board_names) > 1:
             conflict_flag = "Yes"
             notes.append("Multiple board names found across evidence rows.")
+            conflicts.append(
+                ConflictRecord(
+                    school_code=school_code,
+                    record_id=primary.record_id,
+                    issue_type="Conflicting distribution board names",
+                    issue_detail=f"Detected multiple board names for one consolidated key: {', '.join(sorted(board_names))}",
+                    source_file_name=primary.source_file_name,
+                    source_page_number=primary.source_page_number,
+                )
+            )
         if len(descriptions) > 1:
             notes.append("Multiple raw descriptions found; check source evidence.")
+            conflicts.append(
+                ConflictRecord(
+                    school_code=school_code,
+                    record_id=primary.record_id,
+                    issue_type="Conflicting circuit descriptions",
+                    issue_detail=f"Detected {len(descriptions)} distinct raw descriptions for one consolidated key.",
+                    source_file_name=primary.source_file_name,
+                    source_page_number=primary.source_page_number,
+                )
+            )
 
         monitoring, monitoring_reason = _monitoring_decision(equipment_type, special_system, settings)
         control, control_reason = _control_decision(equipment_type, special_system, settings)
@@ -91,11 +111,12 @@ def _merge_status(rows: list[EvidenceRow]) -> str:
 
 
 def _monitoring_decision(equipment_type: str, special_system: str, settings: dict) -> tuple[str, str]:
-    if special_system in settings["monitoring_logic"].get("no", []):
+    monitoring_logic = settings.get("monitoring_logic", {})
+    if special_system in monitoring_logic.get("no", []):
         return "No", f"Excluded because the load appears to be a special system: {special_system}."
-    if equipment_type in settings["monitoring_logic"].get("yes", []):
+    if equipment_type in monitoring_logic.get("yes", []):
         return "Yes", f"Likely monitorable based on inferred equipment type: {equipment_type}."
-    if equipment_type in settings["monitoring_logic"].get("possible", []):
+    if equipment_type in monitoring_logic.get("possible", []):
         return "Possible", f"Potentially monitorable, but the load may be too mixed or operationally unclear: {equipment_type}."
     if not equipment_type:
         return "Uncertain", "No reliable equipment type could be inferred from the current evidence."
@@ -103,12 +124,13 @@ def _monitoring_decision(equipment_type: str, special_system: str, settings: dic
 
 
 def _control_decision(equipment_type: str, special_system: str, settings: dict) -> tuple[str, str]:
-    if special_system or equipment_type in settings["control_logic"].get("no", []):
+    control_logic = settings.get("control_logic", {})
+    if special_system or equipment_type in control_logic.get("no", []):
         label = special_system or equipment_type or "unidentified load"
         return "No", f"Not recommended for automatic control without detailed engineering review: {label}."
-    if equipment_type in settings["control_logic"].get("yes", []):
+    if equipment_type in control_logic.get("yes", []):
         return "Yes", f"Potentially suitable for EMS control based on inferred equipment type: {equipment_type}."
-    if equipment_type in settings["control_logic"].get("possible", []):
+    if equipment_type in control_logic.get("possible", []):
         return "Possible", f"May be suitable for control, but further operational review is needed: {equipment_type}."
     if not equipment_type:
         return "Uncertain", "Control suitability cannot be assessed because the equipment type is unclear."
