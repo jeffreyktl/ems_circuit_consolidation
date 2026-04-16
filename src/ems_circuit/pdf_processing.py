@@ -138,25 +138,26 @@ def extract_pages(
             image_path = image_dir / f"{page_id}.png"
             text_path = text_dir / f"{page_id}.txt"
 
-            pix = page.get_pixmap(
-                matrix=fitz.Matrix(ocr_zoom, ocr_zoom),
-                alpha=False,
-            )
-
-            if save_page_images:
-                pix.save(image_path)
-            else:
-                pix.save(image_path)
-
             native_text = (page.get_text("text") or "").strip()
             ocr_text = ""
             extraction_method = "native"
 
             should_try_ocr = enable_ocr and len(native_text) < native_text_min_chars
+            should_render_page_image = save_page_images or should_try_ocr
+            pix = None
 
-            if should_try_ocr:
-                with Image.open(image_path) as image:
-                    ocr_text, _ = _best_ocr_text(image, try_rotations=ocr_try_rotations)
+            if should_render_page_image:
+                pix = page.get_pixmap(
+                    matrix=fitz.Matrix(ocr_zoom, ocr_zoom),
+                    alpha=False,
+                )
+
+            if pix is not None and save_page_images:
+                pix.save(image_path)
+
+            if should_try_ocr and pix is not None:
+                image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                ocr_text, _ = _best_ocr_text(image, try_rotations=ocr_try_rotations)
                 ocr_text = ocr_text.strip()
                 extraction_method = "ocr" if not native_text else "native+ocr"
 
@@ -165,8 +166,6 @@ def extract_pages(
                 extraction_method = "none"
 
             if save_text_files:
-                text_path.write_text(final_text, encoding="utf-8")
-            else:
                 text_path.write_text(final_text, encoding="utf-8")
 
             pages.append(
@@ -179,8 +178,8 @@ def extract_pages(
                     rotation=page.rotation,
                     width=page.rect.width,
                     height=page.rect.height,
-                    image_path=str(image_path),
-                    text_path=str(text_path),
+                    image_path=str(image_path) if save_page_images else "",
+                    text_path=str(text_path) if save_text_files else "",
                     native_text_chars=len(native_text),
                     ocr_text_chars=len(ocr_text),
                     extraction_method=extraction_method,

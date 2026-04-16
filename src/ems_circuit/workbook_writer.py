@@ -68,12 +68,11 @@ def _write_sheet(ws, rows: list[dict], freeze_panes: str | None = None) -> None:
     for row in ws.iter_rows(min_row=2):
         for cell in row:
             cell.alignment = Alignment(vertical="top", wrap_text=True)
-        values = [str(cell.value or "") for cell in row]
-        if any(token in " | ".join(values) for token in ["Require manual review", "Uncertain", "Yes"]):
-            # Only apply review fill to rows obviously needing attention.
-            if any(token in " | ".join(values) for token in ["Require manual review", "Uncertain"]):
-                for cell in row:
-                    cell.fill = REVIEW_FILL
+        row_text = " | ".join(str(cell.value or "") for cell in row)
+        # Apply review fill to rows obviously needing manual attention.
+        if any(token in row_text for token in ("Require manual review", "Uncertain")):
+            for cell in row:
+                cell.fill = REVIEW_FILL
 
     if freeze_panes:
         ws.freeze_panes = freeze_panes
