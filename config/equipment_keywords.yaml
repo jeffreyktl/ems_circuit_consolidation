@@ -1,0 +1,65 @@
+air-conditioning:
+  - air conditioner
+  - air conditioner unit
+  - a/c
+  - ac unit
+  - indoor unit
+  - outdoor unit
+  - vrv
+  - vrf
+lighting:
+  - lighting
+  - emergency lighting
+  - light
+  - ltg
+ventilation:
+  - exhaust fan
+  - exh. fan
+  - exh fan
+  - fan
+  - ventilation
+water heater:
+  - water heater
+socket outlet / power outlet:
+  - 13a s/o
+  - 13a so
+  - s/o
+  - socket
+  - spur
+  - fused spur
+  - f/su
+  - fsu
+server / it equipment:
+  - server
+  - it
+  - computer
+  - smart tv
+  - projector
+  - av
+laboratory equipment:
+  - laboratory
+  - lab
+  - dispenser
+  - table bottom
+pump:
+  - pump
+pantry equipment:
+  - pantry
+  - hand dryer
+fire / life safety:
+  - fire
+  - emergency lighting
+  - exit sign
+  - smoke detector
+  - fsp
+  - fap
+  - fsu
+pv system:
+  - pv
+  - solar
+  - inverter
+general power:
+  - general power
+miscellaneous / others:
+  - spare
+  - space

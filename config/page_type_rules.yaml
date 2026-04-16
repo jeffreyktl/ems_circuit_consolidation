@@ -1,0 +1,38 @@
+transmittal_cover:
+  patterns:
+    - endorsed wr2
+    - enclosed herewith
+    - acknowledge receipt
+    - correspondence
+wr2_certificate:
+  patterns:
+    - form wr2
+    - periodic test certificate
+    - hereby certify that
+inspection_report_index:
+  patterns:
+    - inspection, testing & maintenance report
+    - testing and inspection was carried out as per test reports attached
+checklist:
+  patterns:
+    - switchboards, circuit breakers and main switches
+    - final circuits
+    - earthing
+works_order:
+  patterns:
+    - works order
+    - works description
+    - contract no.
+distribution_board_test_result:
+  patterns:
+    - test results of distribution board
+    - schedule of test results for electrical wiring
+    - distribution board location & no.
+schematic_as_built:
+  patterns:
+    - as-built
+    - schematic diagram
+    - single line diagram
+    - electrical underground split(c)
+unknown:
+  patterns: []

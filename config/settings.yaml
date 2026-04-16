@@ -1,0 +1,52 @@
+project_name: "ems_circuit_consolidation"
+
+raw_data_dir: "data/raw"
+working_dir: "data/working"
+output_dir: "data/output"
+logs_dir: "logs"
+
+supported_extensions:
+  - ".pdf"
+
+enable_ocr: true
+tesseract_cmd: "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+lang: "eng"
+ocr_try_rotations: true
+ocr_zoom: 2.0
+native_text_min_chars: 40
+
+save_page_images: true
+save_text_files: true
+write_excel: true
+write_csv: true
+
+enable_page_classification: true
+unknown_page_type: "unknown"
+
+page_types:
+  - "transmittal_cover"
+  - "wr2_certificate"
+  - "inspection_report_index"
+  - "checklist"
+  - "works_order"
+  - "distribution_board_test_result"
+  - "schematic_as_built"
+  - "unknown"
+
+allow_inferred_fields: true
+require_source_traceability: true
+
+unresolved_status_values:
+  - "Uncertain"
+  - "Not identified"
+  - "Not available"
+  - "Require manual review"
+
+detect_distribution_board_pages: true
+detect_schematic_pages: true
+detect_wr2_pages: true
+min_circuit_rows_per_page_for_confidence: 1
+
+create_conflict_register: true
+flag_empty_extraction_pages: true
+flag_unparsed_distribution_board_pages: true

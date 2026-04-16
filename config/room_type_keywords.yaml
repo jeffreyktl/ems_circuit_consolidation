@@ -1,0 +1,45 @@
+classroom:
+  - classroom
+laboratory:
+  - laboratory
+  - lab
+staff room:
+  - staff room
+office:
+  - office
+hall:
+  - hall
+corridor:
+  - corridor
+toilet:
+  - toilet
+store room:
+  - store
+library:
+  - library
+computer room:
+  - computer room
+special room:
+  - english room
+  - art room
+  - music room
+multi-purpose room:
+  - multi purpose
+  - multipurpose
+  - activity room
+plant room:
+  - plant room
+  - m&e duct
+  - switch room
+  - main switch room
+pantry:
+  - pantry
+medical room:
+  - medical inspection
+server room:
+  - server room
+assembly hall:
+  - assembly hall
+outdoor area:
+  - playground
+  - roof
